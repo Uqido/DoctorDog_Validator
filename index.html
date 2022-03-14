@@ -3,5 +3,49 @@
         <h1>DoctorDog daily calories calculator</h1>
     </head>
     <body>
+        <form method="post" name="dog_info">
+            <label for="dog_name">Dog Name:</label><br>
+            <input type="text" id="dog_name" name="dog_name"><br>
+            <label for="dog_sex">Dog Sex:</label><br>
+            <select name="dog_sex" id="dog_sex">
+                <option value="0">Female</option>
+                <option value="1">Male</option>
+            </select><br>
+            <label for="dog_weigth">Dog Weigth (kg):</label><br>
+            <input type="number" id="dog_weigth" name="dog_weigth"><br>
+            <label for="dog_birthday">Dog Birthday:</label><br>
+            <input type="date" id="dog_birthday" name="dog_birthday"><br>
+            <label for="bcs">Dog BCS (Body Condition Score):</label><br>
+            <input type="number" id="bcs" name="bcs"><br>
+            <label for="activity">Activity level:</label><br>
+            <select name="activity" id="activity">
+                <option value="0">Low</option>
+                <option value="1">Standard</option>
+                <option value="2">Good</option>
+                <option value="3">High</option>
+            </select><br>
+            <input type="checkbox" name="is_neutered" id="is_neutered">
+            <label for="is_neutered">Neutered:</label><br>
+            <label for="dog_status">Dog Current Status:</label><br>
+            <select name="dog_status" id="dog_status">
+                <option value="0">Puppy</option>
+                <option value="1">Pregnant</option>
+                <option value="2">Lactating</option>
+                <option value="3">None of the above</option>
+            </select><br>
+            <label for="living_condition">Mostly lives:</label><br>
+            <select name="living_condition" id="living_condition">
+                <option value="0">Inside</option>
+                <option value="1">Outside</option>
+            </select><br>
+            <label for="current_season">Current Season</label><br>
+            <select name="current_season" id="current_season">
+                <option value="0">Spring</option>
+                <option value="1">Summer</option>
+                <option value="2">Fall</option>
+                <option value="3">Winter</option>
+            </select><br>
+        </form>
+        <button type="submit" form="dog_info" value="Submit">Calcola</button>
     </body>
 </html>

@@ -136,7 +136,7 @@
                 sex_multiplier = dog_sex == "0" ? -0.05 : 0;
                 multiplier = activity_multiplier + bcs_multiplier + outside_multiplier + neutered_multiplier + sex_multiplier;
                 energy = base_energy + (base_energy * multiplier);
-                ret.innerHTML = energy + " kcalories/day";
+                ret.innerHTML = energy.toFixed(2) + " kcalories/day";
                 break;
             case "1":
                 gestation_period = document.getElementById("gestation_period").value;
@@ -147,7 +147,7 @@
                 else {
                     energy = 132  * bw_pow + 26 * dog_weigth;
                 }
-                ret.innerHTML = energy + " kcalories/day";
+                ret.innerHTML = energy.toFixed(2) + " kcalories/day";
                 break;
             case "2":
                 puppies_number = document.getElementById("number_of_puppies").value;
@@ -160,7 +160,7 @@
                 else{
                     energy = 145 * bw_pow + (96 + 12 * puppies_number) * dog_weigth * L;
                 }
-                ret.innerHTML = energy + " kcalories/day";
+                ret.innerHTML = energy.toFixed(2) + " kcalories/day";
                 break;
             case "3":
                 ebw = document.getElementById("estimated_bw").value;
@@ -171,7 +171,7 @@
                 else{
                     energy = (254.1 - 135.0 * dog_weigth / ebw) * bw_pow;
                 }
-                ret.innerHTML = energy + " kcalories/day";
+                ret.innerHTML = energy.toFixed(2) + " kcalories/day";
                 break;
         
             default:

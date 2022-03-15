@@ -17,7 +17,17 @@
             <label for="dog_birthday">Dog Birthday:</label><br>
             <input type="date" id="dog_birthday" name="dog_birthday"><br>
             <label for="bcs">Dog BCS (Body Condition Score):</label><br>
-            <input type="number" id="bcs" name="bcs"><br>
+            <select name="bcs" id="bcs">
+                <option value="0">1</option>
+                <option value="1">2</option>
+                <option value="2">3</option>
+                <option value="3">4</option>
+                <option value="4">5</option>
+                <option value="5">6</option>
+                <option value="6">7</option>
+                <option value="7">8</option>
+                <option value="8">9</option>
+            </select><br>
             <label for="activity">Activity level:</label><br>
             <select name="activity" id="activity">
                 <option value="0">Low</option>
@@ -25,10 +35,10 @@
                 <option value="2">Good</option>
                 <option value="3">High</option>
             </select><br>
-            <input type="checkbox" name="is_neutered" id="is_neutered">
             <label for="is_neutered">Neutered:</label><br>
+            <input type="checkbox" name="is_neutered" id="is_neutered"><br>
             <label for="dog_status">Dog Current Status:</label><br>
-            <select onchange="toggleDivs()" name="dog_status" id="dog_status">
+            <select onchange="toggleStatusDivs()" name="dog_status" id="dog_status">
                 <option value="0">None of the above</option>
                 <option value="1">Pregnant</option>
                 <option value="2">Lactating</option>
@@ -57,10 +67,11 @@
                 <input type="number" id="estimated_bw" name="estimated_bw"><br>
             </div>
             <label for="living_condition">Mostly lives:</label><br>
-            <select name="living_condition" id="living_condition">
+            <select onchange="toggleSeasonDivs()" name="living_condition" id="living_condition">
                 <option value="0">Inside</option>
                 <option value="1">Outside</option>
             </select><br>
+            <div id="season_div" style="display: none;">
             <label for="current_season">Current Season</label><br>
             <select name="current_season" id="current_season">
                 <option value="0">Spring</option>
@@ -68,16 +79,74 @@
                 <option value="2">Fall</option>
                 <option value="3">Winter</option>
             </select><br>
+        </div>
         </form>
-        <button type="submit" form="dog_info" value="Submit">Calcola</button>
+        <button type="submit" onclick="calculate_calories()" form="dog_info" value="Submit">Calcola</button>
+        <div id="results" style="display: none;">
+            <b>Daily calories calculated: </b><br>
+            <p id="calories"></p>
+        </div>
     </body>
 </html>
 
 <script>
-    function toggleDivs(){
+    function toggleStatusDivs(){
         status = document.getElementById("dog_status").value;
         document.getElementById("pregnant").style.display = status == 1 ? "block" : "none";
         document.getElementById("lactating").style.display = status == 2 ? "block" : "none";
         document.getElementById("puppy").style.display = status == 3 ? "block" : "none";
+    }
+
+    function toggleSeasonDivs(){
+        lives_outside = document.getElementById("living_condition").value;
+        document.getElementById("season_div").style.display = lives_outside == 1 ? "block" : "none";
+    }
+
+    function calculate_calories(){
+        activity_values = [-0.15,0,0.15,0.35];
+        bcs_values = [0.15,0.12,0.1,0.05,0,-0.05,-0.1,-0.12,-0.15]
+        document.getElementById("results").style.display = "block";
+        ret = document.getElementById("calories");
+        dog_sex = document.getElementById("dog_sex").value;
+        dog_weigth = document.getElementById("dog_weigth").value;
+        birthday = document.getElementById("dog_birthday");
+        bcs = document.getElementById("bcs").value;
+        activity = document.getElementById("activity").value;
+        is_neutered = document.getElementById("is_neutered").checked;
+        lives_outside = document.getElementById("living_condition").value;
+        current_season = document.getElementById("current_season").value
+        status = document.getElementById("dog_status").value;
+
+        switch (status) {
+            case "0":
+                today = Date.now();
+                age = today - birthday.valueAsNumber;
+                days = Math.floor(age / 1000 / 60 / 60 / 24);
+                //months = Math.floor(days / 30);
+                years = Math.floor(days / 365);
+                energy_by_kg = days <= 2 ? 130 : days < 7 ? 110 : 95;
+                base_energy = energy_by_kg * dog_weigth;
+                activity_multiplier = years >= 7 ? 0 : activity_values[activity];
+                bcs_multiplier = bcs_values[bcs];
+                outside_multiplier = lives_outside=="1" && current_season == "3" ? 0.15 : 0;
+                neutered_multiplier = is_neutered == true ? -0.1 : 0;
+                sex_multiplier = dog_sex == "0" ? -0.05 : 0;
+                multiplier = activity_multiplier + bcs_multiplier + outside_multiplier + neutered_multiplier + sex_multiplier;
+                energy = base_energy + (base_energy * multiplier);
+                ret.innerHTML = energy + " kcalories/day";
+                break;
+            case "1":
+                ret.innerHTML = "DOG";
+                break;
+            case "2":
+                ret.innerHTML = "DOG";
+                break;
+            case "3":
+                ret.innerHTML = "DOG";
+                break;
+        
+            default:
+                break;
+        }
     }
 </script>

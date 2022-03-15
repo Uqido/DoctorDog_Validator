@@ -105,6 +105,7 @@
     function calculate_calories(){
         activity_values = [-0.15,0,0.15,0.35];
         bcs_values = [0.15,0.12,0.1,0.05,0,-0.05,-0.1,-0.12,-0.15]
+        L_by_week = [0.75,0.95,1.1,1.2];
         document.getElementById("results").style.display = "block";
         ret = document.getElementById("calories");
         dog_sex = document.getElementById("dog_sex").value;
@@ -117,14 +118,15 @@
         lives_outside = document.getElementById("living_condition").value;
         current_season = document.getElementById("current_season").value
         status = document.getElementById("dog_status").value;
-
+        today = Date.now();
+        age = today - birthday.valueAsNumber;
+        days = Math.floor(age / 1000 / 60 / 60 / 24);
+        weeks = Math.floor(days/7);
+        //months = Math.floor(days / 30);
+        years = Math.floor(days / 365);
         switch (status) {
             case "0":
-                today = Date.now();
-                age = today - birthday.valueAsNumber;
-                days = Math.floor(age / 1000 / 60 / 60 / 24);
-                //months = Math.floor(days / 30);
-                years = Math.floor(days / 365);
+                
                 energy_by_kg = days <= 2 ? 130 : days < 7 ? 110 : 95;
                 base_energy = energy_by_kg * bw_pow;
                 activity_multiplier = years >= 7 ? 0 : activity_values[activity];
@@ -137,13 +139,39 @@
                 ret.innerHTML = energy + " kcalories/day";
                 break;
             case "1":
-                ret.innerHTML = "DOG";
+                gestation_period = document.getElementById("gestation_period").value;
+                energy = 0;
+                if(gestation_period == "0"){
+                    energy = 132 * bw_pow;
+                }
+                else {
+                    energy = 132  * bw_pow + 26 * dog_weigth;
+                }
+                ret.innerHTML = energy + " kcalories/day";
                 break;
             case "2":
-                ret.innerHTML = "DOG";
+                puppies_number = document.getElementById("number_of_puppies").value;
+                current_week = document.getElementById("current_weeks").value;
+                L = L_by_week[current_week];
+                energy = 0;
+                if(puppies_number <= 4){
+                    energy = 145 * bw_pow + 24 * puppies_number * dog_weigth * L;
+                }
+                else{
+                    energy = 145 * bw_pow + (96 + 12 * puppies_number) * dog_weigth * L;
+                }
+                ret.innerHTML = energy + " kcalories/day";
                 break;
             case "3":
-                ret.innerHTML = "DOG";
+                ebw = document.getElementById("estimated_bw").value;
+                energy = 0;
+                if(weeks < 8){
+                    energy = 25 / 100 * (dog_weigth*1000);
+                }
+                else{
+                    energy = (254.1 - 135.0 * dog_weigth / ebw) * bw_pow;
+                }
+                ret.innerHTML = energy + " kcalories/day";
                 break;
         
             default:

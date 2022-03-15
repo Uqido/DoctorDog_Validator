@@ -109,6 +109,7 @@
         ret = document.getElementById("calories");
         dog_sex = document.getElementById("dog_sex").value;
         dog_weigth = document.getElementById("dog_weigth").value;
+        bw_pow = Math.pow(dog_weigth,0.75);
         birthday = document.getElementById("dog_birthday");
         bcs = document.getElementById("bcs").value;
         activity = document.getElementById("activity").value;
@@ -125,7 +126,7 @@
                 //months = Math.floor(days / 30);
                 years = Math.floor(days / 365);
                 energy_by_kg = days <= 2 ? 130 : days < 7 ? 110 : 95;
-                base_energy = energy_by_kg * dog_weigth;
+                base_energy = energy_by_kg * bw_pow;
                 activity_multiplier = years >= 7 ? 0 : activity_values[activity];
                 bcs_multiplier = bcs_values[bcs];
                 outside_multiplier = lives_outside=="1" && current_season == "3" ? 0.15 : 0;

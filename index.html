@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
     <head>
         <h1>DoctorDog daily calories calculator</h1>
@@ -27,12 +28,34 @@
             <input type="checkbox" name="is_neutered" id="is_neutered">
             <label for="is_neutered">Neutered:</label><br>
             <label for="dog_status">Dog Current Status:</label><br>
-            <select name="dog_status" id="dog_status">
-                <option value="0">Puppy</option>
+            <select onchange="toggleDivs()" name="dog_status" id="dog_status">
+                <option value="0">None of the above</option>
                 <option value="1">Pregnant</option>
                 <option value="2">Lactating</option>
-                <option value="3">None of the above</option>
+                <option value="3">Puppy</option>
             </select><br>
+            <div id="pregnant" style="display: none;">
+                <label for="gestation_period">Dog Gestation Period:</label><br>
+                <select name="gestation_period" id="gestation_period">
+                    <option value="0">4 weeks or less</option>
+                    <option value="1">more than 4 weeks</option>
+                </select><br>
+            </div>
+            <div id="lactating" style="display: none;">
+                <label for="number_of_puppies">Number of puppies:</label><br>
+                <input type="number" id="number_of_puppies" name="number_of_puppies"><br>
+                <label for="current_weeks">Current lactation week:</label><br>
+                <select name="current_weeks" id="current_weeks">
+                    <option value="0">Week 1</option>
+                    <option value="1">Week 2</option>
+                    <option value="2">Week 3</option>
+                    <option value="3">Week 4</option>
+                </select><br>
+            </div>
+            <div id="puppy" style="display: none;">
+                <label for="estimated_bw">Estimated Body Weigth:</label><br>
+                <input type="number" id="estimated_bw" name="estimated_bw"><br>
+            </div>
             <label for="living_condition">Mostly lives:</label><br>
             <select name="living_condition" id="living_condition">
                 <option value="0">Inside</option>
@@ -49,3 +72,12 @@
         <button type="submit" form="dog_info" value="Submit">Calcola</button>
     </body>
 </html>
+
+<script>
+    function toggleDivs(){
+        status = document.getElementById("dog_status").value;
+        document.getElementById("pregnant").style.display = status == 1 ? "block" : "none";
+        document.getElementById("lactating").style.display = status == 2 ? "block" : "none";
+        document.getElementById("puppy").style.display = status == 3 ? "block" : "none";
+    }
+</script>

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+    <link rel="stylesheet" href="Style.css">
     <head>
         <h1>DoctorDog daily calories calculator</h1>
     </head>
@@ -136,7 +137,7 @@
                 sex_multiplier = dog_sex == "0" ? -0.05 : 0;
                 multiplier = activity_multiplier + bcs_multiplier + outside_multiplier + neutered_multiplier + sex_multiplier;
                 energy = base_energy + (base_energy * multiplier);
-                ret.innerHTML = energy.toFixed(2) + " kcalories/day";
+                ret.innerHTML = energy + " kcalories/day";
                 break;
             case "1":
                 gestation_period = document.getElementById("gestation_period").value;

@@ -127,7 +127,6 @@
         years = Math.floor(days / 365);
         switch (status) {
             case "0":
-                
                 energy_by_kg = days <= 2 ? 130 : days < 7 ? 110 : 95;
                 base_energy = energy_by_kg * bw_pow;
                 activity_multiplier = years >= 7 ? 0 : activity_values[activity];
@@ -137,7 +136,7 @@
                 sex_multiplier = dog_sex == "0" ? -0.05 : 0;
                 multiplier = activity_multiplier + bcs_multiplier + outside_multiplier + neutered_multiplier + sex_multiplier;
                 energy = base_energy + (base_energy * multiplier);
-                ret.innerHTML = energy + " kcalories/day";
+                ret.innerHTML = energy.toFixed(2) + " kcalories/day";
                 break;
             case "1":
                 gestation_period = document.getElementById("gestation_period").value;

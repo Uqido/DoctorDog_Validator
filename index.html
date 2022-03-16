@@ -2,12 +2,12 @@
 <html>
     <link rel="stylesheet" href="Style.css">
     <head>
-        <h1>DoctorDog daily calories calculator</h1>
+        <h1>DogUp daily calories calculator</h1>
     </head>
     <body>
         <form method="post" name="dog_info">
             <label for="dog_name">Dog Name:</label><br>
-            <input type="text" id="dog_name" name="dog_name"><br>
+            <input type="text" id="dog_name" name="dog_name" required><br>
             <label for="dog_sex">Dog Sex:</label><br>
             <select name="dog_sex" id="dog_sex">
                 <option value="0">Female</option>
@@ -84,7 +84,6 @@
         </form>
         <button type="submit" onclick="calculate_calories()" form="dog_info" value="Submit">Calcola</button>
         <div id="results" style="display: none;">
-            <b>Daily calories calculated: </b><br>
             <p id="calories"></p>
         </div>
     </body>
@@ -103,11 +102,47 @@
         document.getElementById("season_div").style.display = lives_outside == 1 ? "block" : "none";
     }
 
+    function validate_form(){
+        check = true;
+        ret = document.getElementById("calories");
+        ret.innerHTML = "";
+        dog_name = document.getElementById("dog_name").value;
+        if(dog_name == ""){
+            ret.innerHTML += "Remember to add the dog's name! <br>"
+            check = false;
+        }
+        dog_weigth = document.getElementById("dog_weigth").value;
+        if(dog_weigth <= 0){
+            ret.innerHTML += "Dog's weigth must be greater than 0!<br>"
+            check = false;
+        }
+        birthday = document.getElementById("dog_birthday");
+        if(birthday.valueAsNumber >= Date.now() || isNaN(birthday.valueAsNumber)){
+            ret.innerHTML += "Check your dog's birthday!<br>"
+            check = false;
+        }
+        is_neutered = document.getElementById("is_neutered").checked;
+        status = document.getElementById("dog_status").value;
+        if(is_neutered && (status == 1 || status == 2)){
+            ret.innerHTML += "Dog can't be neutered and pregnant/lactating<br>"
+            check = false;
+        }
+        dog_sex = document.getElementById("dog_sex").value;
+        if(dog_sex == 1 && (status == 1 || status == 2)){
+            ret.innerHTML += "Dog can't be male and pregnant/lactating<br>"
+            check = false;
+        }
+        return check;
+    }
+
     function calculate_calories(){
+        document.getElementById("results").style.display = "block";
+        if(!validate_form()){
+            return
+        }
         activity_values = [-0.15,0,0.15,0.35];
         bcs_values = [0.15,0.12,0.1,0.05,0,-0.05,-0.1,-0.12,-0.15]
         L_by_week = [0.75,0.95,1.1,1.2];
-        document.getElementById("results").style.display = "block";
         ret = document.getElementById("calories");
         dog_sex = document.getElementById("dog_sex").value;
         dog_weigth = document.getElementById("dog_weigth").value;
@@ -135,9 +170,8 @@
                 neutered_multiplier = is_neutered == true ? -0.1 : 0;
                 sex_multiplier = dog_sex == "0" ? -0.05 : 0;
                 multiplier = activity_multiplier + bcs_multiplier + outside_multiplier + neutered_multiplier + sex_multiplier;
-                console.log("Multiplier: " + multiplier);
                 energy = base_energy + (base_energy * multiplier);
-                ret.innerHTML = energy.toFixed(2) + " kcalories/day";
+                ret.innerHTML = "<b>Daily calories calculated: </b><br>" + energy.toFixed(2) + " kcalories/day";
                 break;
             case "1":
                 gestation_period = document.getElementById("gestation_period").value;
@@ -148,7 +182,7 @@
                 else {
                     energy = 132  * bw_pow + 26 * dog_weigth;
                 }
-                ret.innerHTML = energy.toFixed(2) + " kcalories/day";
+                ret.innerHTML = "<b>Daily calories calculated: </b><br>" + energy.toFixed(2) + " kcalories/day";
                 break;
             case "2":
                 puppies_number = document.getElementById("number_of_puppies").value;
@@ -161,7 +195,7 @@
                 else{
                     energy = 145 * bw_pow + (96 + 12 * puppies_number) * dog_weigth * L;
                 }
-                ret.innerHTML = energy.toFixed(2) + " kcalories/day";
+                ret.innerHTML = "<b>Daily calories calculated: </b><br>" + energy.toFixed(2) + " kcalories/day";
                 break;
             case "3":
                 ebw = document.getElementById("estimated_bw").value;
@@ -172,7 +206,7 @@
                 else{
                     energy = (254.1 - 135.0 * dog_weigth / ebw) * bw_pow;
                 }
-                ret.innerHTML = energy.toFixed(2) + " kcalories/day";
+                ret.innerHTML = "<b>Daily calories calculated: </b><br>" + energy.toFixed(2) + " kcalories/day";
                 break;
         
             default:

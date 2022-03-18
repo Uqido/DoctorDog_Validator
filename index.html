@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<script src="js/FileSaver.js"></script>
 <html>
     <link rel="stylesheet" href="Style.css">
     <head>
@@ -163,6 +164,11 @@
         weeks = Math.floor(days/7);
         //months = Math.floor(days / 30);
         years = Math.floor(days / 365);
+        
+        activity_string = ["Low", "Standard", "High", "Very High"];
+        bcsText = document.getElementById("bcs");
+        sex = document.getElementById("dog_sex");
+        msg = "Name: "+dog_name+"\nDog Sex: "+sex.options[sex.selectedIndex].text +"\nDog Weigth: "+dog_weigth+" kg\nAge: " + years + " years\nBCS: "+bcsText.options[bcsText.selectedIndex].text+"\nActivity Level: "+activity_string[activity];
         switch (status) {
             case "0":
                 energy_by_kg = years <= 2 ? 130 : years < 7 ? 110 : 95;
@@ -176,7 +182,9 @@
                 ret.innerHTML = "<b>Daily calories calculated: </b><br>" + energy.toFixed(2) + " kcalories/day";
                 break;
             case "1":
-                gestation_period = document.getElementById("gestation_period").value;
+                gest = document.getElementById("gestation_period");
+                gestation_period = gest.value;
+                msg +="\nGestation period: "+gest.options[gest.selectedIndex].text;
                 energy = 0;
                 if(gestation_period == "0"){
                     energy = 132 * bw_pow;
@@ -187,8 +195,10 @@
                 ret.innerHTML = "<b>Daily calories calculated: </b><br>" + energy.toFixed(2) + " kcalories/day";
                 break;
             case "2":
-                puppies_number = document.getElementById("number_of_puppies").value;
-                current_week = document.getElementById("current_weeks").value;
+                week = document.getElementById("current_weeks");
+                puppies_number =  document.getElementById("number_of_puppies").value;
+                current_week = week.value;
+                msg +="\nPuppies: "+puppies_number+"\nWeek: "+week.options[week.selectedIndex].text;
                 L = L_by_week[current_week];
                 energy = 0;
                 if(puppies_number <= 4){
@@ -201,6 +211,7 @@
                 break;
             case "3":
                 ebw = document.getElementById("estimated_bw").value;
+                msg +="\nEstimated body weigth: "+ebw+ " kg";
                 energy = 0;
                 if(weeks < 8){
                     energy = 25 / 100 * (dog_weigth*1000);
@@ -213,7 +224,14 @@
         
             default:
                 break;
-        }
-        msg = "Dog Sex: "+dog_sex+"\nDog Weigth: "+dog_weigth+"\nAge: " + years + "\nBCS: "+bcs+"\n" 
+        }  
+        msg+="\nCALORIES: "+energy.toFixed(2) + " KCal"
+        saveStaticDataToFile(msg,dog_name);
     }
+    function saveStaticDataToFile(msg,dog_name) {
+            var blob = new Blob([msg],
+                { type: "text/plain;charset=utf-8" });
+            saveAs(blob, "Results_"+dog_name+".txt");
+        }
+
 </script>
